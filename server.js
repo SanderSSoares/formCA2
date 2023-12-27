@@ -28,12 +28,13 @@ app.post('/submit', function(req, res){
       if (!/^[A-Za-z0-9]{1,20}$/.test(surname)) {
         return res.send("Surname must be alphanumeric, less than 20 characters.");
       }
-
+        
+      // create a variable with the regular expressions to require elements from an email 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
+      if (!emailRegex.test(email)) { // test if the user input and the regex variable are compatible, if not it return an erro message  
         return res.send("Please enter a valid email address!");
       }
-
+          // using regex test if the phone is numeric and has 10 digits 
       if (!/^\d{10}$/.test(phone_number)) {
         return res.send("Phone number must have only numbers up to 10 digits.");
       }
