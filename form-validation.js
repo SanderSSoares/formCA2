@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
       const eircode = document.getElementById('eircode');
       let valid = true;
   
-      // Validate First and Second Name (alphanumeric, max 20 characters)
-      if (!/^[A-Za-z0-9]{1,20}$/.test(firstName.value)) {
-        alert('First Name is invalid.');
+      // uses regular expression to Validate First and Second Name (alphanumeric, max 20 characters)
+      if (!/^[A-Za-z0-9]{1,20}$/.test(firstName.value)) {// test if the user input is compatible with the regex , if not equal sends alert 
+        alert('First Name is invalid.'); 
         valid = false;
       }
       if (!/^[A-Za-z0-9]{1,20}$/.test(secondName.value)) {
