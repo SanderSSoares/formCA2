@@ -1,12 +1,22 @@
 var mysql = require("mysql");
 
-var connection = mysql.createConnection({
+var connection1 = mysql.createConnection({
     host: "localhost",
     database:"mysql_db",
     user:"root",
     password:"password"
 
 })
+
+// configuration of the data base 
+const dbConfig = {
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'mysql_db',
+  };
+  // instantiate the variable connections to be  the module create connection of mysql using the set of atributs of our data base 
+  const connection = mysql.createConnection(dbConfig);
 
 
 
@@ -68,17 +78,23 @@ function insertValidRecords(validRecords, callback) {
     });
   }
 
+  module.exports = {
+    createDatabaseConnection,
+    closeDatabaseConnection,
+    insertValidRecords,
+    connection1,
+  };
 
   
   // export the modules create when database is called
 module.exports = {
-    connection,
+    
     createDatabaseConnection,
     closeDatabaseConnection,
     insertValidRecords,
   };
 
-module.exports = connection;
+module.exports = connection1;
 
 
 
