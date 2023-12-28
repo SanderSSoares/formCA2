@@ -1,4 +1,6 @@
 
+// Read csv data, separate each word and but at the right place on the data base 
+
 // index.js
 const csvData = `"John", "Doe","johndoe@example.com", "0893216548", "1YR5DD"
 "Jane", "Smith","janesmith@example.com", "0892856548", "8MH7WE"
@@ -7,6 +9,9 @@ const csvData = `"John", "Doe","johndoe@example.com", "0893216548", "1YR5DD"
 
 //call the database  setup havig access to all its modules 
 var database = require('./database');
+
+const connection = database.connection; // import the connection
+
 
 
 
@@ -85,7 +90,7 @@ try {
 database.createDatabaseConnection();
  //insert valid records in the data base  and close the connection 
  database.insertValidRecords(validatedData, () => {
-   database.closeDatabaseConnection();
+   
  });
  // catch any error and show a message 
 } catch (error) {
@@ -116,7 +121,7 @@ var express = require("express");
 
 var app = express();// call the method  using  setting to the variable app that have access to all functions and modules of the express framework 
 
-var connection = require('./database'); //import mysql connection  and set it to use the attributes  given on data base file 
+//var connection = require('./database'); //import mysql connection  and set it to use the attributes  given on data base file 
 var path = require('path');
 
 app.use(express.static('public'));
@@ -186,11 +191,13 @@ app.get("/form", function (req, res){
 // set the app to listen to the port 3000 and runs a function 
 app.listen(3000, function(){
 
-    console.log("App Listening on port 3000")
+    console.log("App Listening on port 3000 thank you ")
     
-    connection.connect(function(err){ // try to connect to the database and catch the error if can't connect 
+   // database.closeDatabaseConnection();
+    
+    // connection.connect(function(err){ // try to connect to the database and catch the error if can't connect 
 
-        if(err) throw err;// if erro throw it to the terminal and if connection is successfull output a message 
-        console.log('Database connected')
-    })
+    //     if(err) throw err;// if erro throw it to the terminal and if connection is successfull output a message 
+    //     console.log('Database connected')
+    // })
 })

@@ -1,6 +1,6 @@
 var mysql = require("mysql");
 
-var connection1 = mysql.createConnection({
+var connection = mysql.createConnection({
     host: "localhost",
     database:"mysql_db",
     user:"root",
@@ -16,13 +16,13 @@ const dbConfig = {
     database: 'mysql_db',
   };
   // instantiate the variable connections to be  the module create connection of mysql using the set of atributs of our data base 
-  const connection = mysql.createConnection(dbConfig);
+  const connection1 = mysql.createConnection(dbConfig);
 
 
 
 // function to create the connection with the data base
 function createDatabaseConnection() {
-    connection.connect((err) => { //try connection and handle the error, showing a error message 
+    connection1.connect((err) => { //try connection and handle the error, showing a error message 
       if (err) {
         console.error('Error connecting to MySQL:', err.message);
         return;
@@ -34,7 +34,7 @@ function createDatabaseConnection() {
 
   // function to close the data base connection, handle error and output when connection is closed 
 function closeDatabaseConnection() {
-    connection.end((err) => {
+    connection1.end((err) => {
       if (err) {
         console.error('Error closing MySQL connection:', err.message);
         return;
@@ -67,7 +67,7 @@ function insertValidRecords(validRecords, callback) {
     ]);
      
     // call a connection query  to insert the sql query with the map of  the validRecords
-    connection.query(insertQuery, [values], (err, results) => {
+    connection1.query(insertQuery, [values], (err, results) => {
       if (err) { // if can't insert show a error message 
         console.error('Error inserting records into MySQL:', err.message);
         callback();
@@ -78,23 +78,18 @@ function insertValidRecords(validRecords, callback) {
     });
   }
 
-  module.exports = {
-    createDatabaseConnection,
-    closeDatabaseConnection,
-    insertValidRecords,
-    connection1,
-  };
+ 
 
   
   // export the modules create when database is called
 module.exports = {
-    
+    connection,
     createDatabaseConnection,
     closeDatabaseConnection,
     insertValidRecords,
   };
 
-module.exports = connection1;
+//module.exports = connection1;
 
 
 
