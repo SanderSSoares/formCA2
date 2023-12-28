@@ -1,6 +1,11 @@
+
+// importing the libraries to be used in the project 
+// import the express package framework instantiating it 
 var express = require("express");
-var app = express();
-var connection = require('./database');
+
+var app = express();// call the method  using  setting to the variable app that have access to all functions and modules of the express framework 
+
+var connection = require('./database'); //import mysql connection  and set it to use the attributes  given on data base file 
 var path = require('path');
 
 app.use(express.static('public'));
@@ -69,7 +74,7 @@ app.listen(3000, function(){
     console.log("App Listening on port 3000")
     connection.connect(function(err){ // try to connect to the database and catch the error if can't connect 
 
-        if(err) throw err;// iff erro throw it to the terminal and if connection is successfull output a message 
+        if(err) throw err;// if erro throw it to the terminal and if connection is successfull output a message 
         console.log('Database connected')
     })
 })
