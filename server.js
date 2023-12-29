@@ -14,10 +14,6 @@ const csvData = `"John", "Doe","johndoe@example.com", "0893216548", "1YR5DD"
 var database = require('./database');
 
 const connection = database.connection; // import the connection
-
-
-
-
 // check if the  inserted record is an invalid  input and is  missing any attribute 
 function isValidRecord(record) {
 
@@ -40,12 +36,7 @@ console.log('this contains invalid values please check the inputs at the followi
   }else{
     return valid;
  
-}
-
-  
-}
-
-
+}}
 // function to split the data by the " , " will be called in the validation function
 function parseCSVData(csvString) { // take as paramether any csvString
   const lines = csvString.split('\n'); // split the string is lines 
@@ -116,25 +107,6 @@ database.createDatabaseConnection();
 } catch (error) {
  console.error('Error:', error.message);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // importing the libraries to be used in the project 
 // import the express package framework instantiating it 
 var express = require("express");
@@ -143,37 +115,31 @@ var app = express();// call the method  using  setting to the variable app that 
 
 
 var path = require('path');
-//Setting up a static middleware to serve files from the public directory
-//We had to set it to public, because for some reason it was not working
+
 app.use(express.static('public'));
 
 app.use(express.urlencoded({extended:true}));// app method to encode the url  and only access those which matches the requirement
 
 app.get('/', function(req,res){
+
     res.sendFile(path.join(__dirname, 'form.html'));
 });
-//After the first forms being submitted, the css formating was gone, so below structure was adopted
-//Defining a route for serving the style.css file
+//search for css
 app.get('/style.css', (req, res) => {
-  res.setHeader('Content-Type', 'text/css');//Setting the response header for CSS content
-  res.sendFile(__dirname + '/style.css');//Sending the style.css file
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(__dirname + '/style.css');
 });
-
-
-
-
 // run a function to submit the informations to the data base , after the information being validate 
 app.post('/submit', function(req, res){
-    //Extract form data from the request body
+
     const {first_name, surname, email, phone_number, eircode}  = req.body;
-    //Here we started the validation of the data
-    //FIrst name must be alphanumeric and of length 20 characters max.
+
     if (!/^[A-Za-z0-9]{1,20}$/.test(first_name)) {
-        return res.send("First Name must be alphanumeric, less than 20 characters.");//Display message in case user inputs wrong data
+        return res.send("First Name must be alphanumeric, less than 20 characters.");  
       }
-    //FIrst name must be alphanumeric and of length 20 characters max.
+
       if (!/^[A-Za-z0-9]{1,20}$/.test(surname)) {
-        return res.send("Surname must be alphanumeric, less than 20 characters.");//Display message in case user inputs wrong data
+        return res.send("Surname must be alphanumeric, less than 20 characters.");
       }
         
       // create a variable with the regular expressions to require elements from an email 
@@ -183,24 +149,25 @@ app.post('/submit', function(req, res){
       }
           // using regex test if the phone is numeric and has 10 digits  if not compatible send erro message 
       if (!/^\d{10}$/.test(phone_number)) {
-        return res.send("Phone number must have only numbers up to 10 digits.");//Display message in case user inputs wrong data
+        return res.send("Phone number must have only numbers up to 10 digits.");
       }
        // regex to check if the iercode starts with a number and  contanit only number and letters Capital or not, and contais 6 digits 
       if (!/^[0-9][A-Za-z0-9]{5}$/.test(eircode)) {
-        return res.send("Eircode must start with a number,and must has up to 6 digits.");//Display message in case user inputs wrong data
+        return res.send("Eircode must start with a number,and must has up to 6 digits.");
       }
-      //If all validation passes, insert form data into our database 
-    if(first_name && surname && email && phone_number && eircode){
-        //Declaring sql variable that uses sql statement to insert into our table pior created
+    if(first_name && surname && email && phone_number && eircode){// if every input is valid  run the folowing code
+        // inserts the inputs into the  data base 
+        const sql = "INSERT INTO mysql_table (first_name, surname, email, phone_number, eircode) VALUES(?, ?, ?, ?, ?)";
+        connection.query(sql, [first_name, surname, email, phone_number, eircode], function(err, results){
          // if not able to add to the data base return the error response 
             if (err) {
                 console.error("Error inserting data:", err);
                 return res.status(500).send("Error: Could not insert data into the database");
-            //Otherwise, display that form was submitted successfully!
-            res.send("Form submitted successfully!");
+            }
+            res.redirect("/form.html");
         });
     }else{
-      //In case one of the validations go wrong, display also this message
+
         return res.send("Please try again, make sure all required fields are filled in!")
     }
 })
@@ -208,7 +175,6 @@ app.get("/form", function (req, res){
 
     res.sendFile(__dirname + '/form.html');
 })
-
 // set the app to listen to the port 3000 and runs a function 
 app.listen(3000, function(){
 
