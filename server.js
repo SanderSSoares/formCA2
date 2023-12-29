@@ -3,9 +3,12 @@
 
 // index.js
 const csvData = `"John", "Doe","johndoe@example.com", "0893216548", "1YR5DD"
-"Jane", "Smith","janesmith@example.com", "0892856548", "8MH7WE"
+"Jane", "Smith","janesmith@example.com", "00892856548", "8MH7WE"
 "Michael", "Johnson","michaeljohnson@example.com", "0898523694", "7RP0RR"
-"Tommy", "Bean","tommybean@example.com", "0894859612", "EYR5DD"`;
+"victor", "Johnson","michaeljohnson@example.com", "0898523694", "7RP0RR"
+"carlos", "Johnson","michaeljohnson@example.com", "90898523694", "7RP0RR"
+"marcelo", "Johnson","michaeljohnson@example.com", "0898523694", "7RP0RR"
+"Tommy", "Bean","tommybean@example.com", "0894859612", "yYR5DD"`;
 
 //call the database  setup havig access to all its modules 
 var database = require('./database');
@@ -17,13 +20,29 @@ const connection = database.connection; // import the connection
 
 // check if the  inserted record is an invalid  input and is  missing any attribute 
 function isValidRecord(record) {
-  return (
-    record.first_name !== undefined &&// check if the information isn't null
-    record.surname !== undefined &&
-    record.email !== undefined &&
-    record.phone_number !== undefined &&
-    record.eircode !== undefined
-  );
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  let valid = true;
+
+ // Regular Expressions  to validate each field before adding it to the database 
+  
+  if(!/^[A-Za-z0-9]{1,20}$/.test(record.first_name)||// check if the name is alfanumeric with 20 digits 
+  !/^[A-Za-z0-9]{1,20}$/.test(record.surname)||
+  !emailRegex.test(record.email)|| // check if contains all elements of an email 
+  !/^\d{10}$/.test(record.phone_number)|| // check if phone has 10 digits 
+  !/^[0-9][A-Za-z0-9]{5}$/.test(record.eircode)) {     // check if ier code starts with number and has 10 digits 
+    // logs to the terminal when error is found 
+console.log('this contains invalid values please check the inputs at the following index');
+// if any field doesan't pass set valid boolean to be false  
+ valid = false; 
+
+
+  }else{
+    return valid;
+ 
+}
+
+  
 }
 
 
@@ -58,10 +77,10 @@ function validateCSVData(csvData) {
   const parsedData = parseCSVData(csvData);
 
   parsedData.forEach((record, index) => { // give a index for each of the String  of the parsed data 
-    if (isValidRecord(record)) { // if the record is valid it will be added to the valid records array 
+    if (isValidRecord(record)==true) { // uses the validation function to see if the record is valid so it will be added to the valid records array 
         validRecords.push(record);// add the atribute to the last index on the array 
 
-    } else { // otherwise  run the function to trow an error showing the exactly index 
+    } else { // otherwise if function  return is false  run the function to throw an error showing the exactly index 
         throwValidationError(index);
     }
   });
@@ -72,7 +91,8 @@ function validateCSVData(csvData) {
 
  // function to throw and error showing the index where it happend 
  function throwValidationError(index) {
-  throw new Error(`Validation failed for record at index ${index}`);
+  console.log(`Validation failed for record at index  ${index}`);
+ // throw new Error(`Validation failed for record at index ${index}`); 
 }
 
 
