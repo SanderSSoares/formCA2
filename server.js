@@ -32,7 +32,7 @@ function isValidRecord(record) {
   !/^\d{10}$/.test(record.phone_number)|| // check if phone has 10 digits 
   !/^[0-9][A-Za-z0-9]{5}$/.test(record.eircode)) {     // check if ier code starts with number and has 10 digits 
     // logs to the terminal when error is found 
-console.log('this contains invalid values please check the inputs at the following index');
+console.log('this contains invalid values please check the inputs at the following row index');
 // if any field doesan't pass set valid boolean to be false  
  valid = false; 
 
