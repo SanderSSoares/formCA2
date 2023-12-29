@@ -1,11 +1,8 @@
 // Read csv data, separate each word, and insert at the right place in the database
-const csvData = `"John", "Doe","johndoe@example.com", "0893216548", "1YR5DD"
-"Jane", "Smith","janesmith@example.com", "00892856548", "8MH7WE"
-"Michael", "Johnson","michaeljohnson@example.com", "0898523694", "7RP0RR"
-"victor", "Johnson","michaeljohnson@example.com", "0898523694", "7RP0RR"
-"carlos", "Johnson","michaeljohnson@example.com", "90898523694", "7RP0RR"
-"marcelo", "Johnson","michaeljohnson@example.com", "0898523694", "7RP0RR"
-"Tommy", "Bean","tommybean@example.com", "0894859612", "yYR5DD"`;
+const csvData = `"John, Doe",30,"johndoe@example.com, 0893216548, 1YR5DD"
+"Jane, Smith","janesmith@example.com, 0892856548, 8MH7WE"
+"Michael, Johnson","michaeljohnson@example.com, 0898523694, 7RP0RR"
+"Tommy, Bean","michaeljohnson@example.com, 0894859612, EYR5DD"`
 
 // Import the database setup having access to all its modules
 var database = require('./database');
@@ -199,7 +196,7 @@ app.listen(3000, function () {
 })
 
 // Middleware function to log incoming requests with below parameters
-//Everything will be displayed after many actions while using this program on the terminal
+//Everything will be displayed on the termina after actions has in this program
 function logRequest(req, res, next) {
   console.log(`[${new Date()}] Request received: ${req.method} ${req.url}`);//logs information about the incoming request
   //Including date, HTTP method of the request and URL of the request

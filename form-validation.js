@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
       event.preventDefault(); // Prevent the form from submitting until validation is complete
   
       // Validate each field
-      const firstName = document.getElementById('firstName');
-      const secondName = document.getElementById('secondName');
-      const phone = document.getElementById('phone');
+      const firstName = document.getElementById('first_name');
+      const surname = document.getElementById('surname');
+      const phone = document.getElementById('phone_number');
       const eircode = document.getElementById('eircode');
       let valid = true;
   
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('First Name is invalid.'); 
         valid = false;
       }
-      if (!/^[A-Za-z0-9]{1,20}$/.test(secondName.value)) {
+      if (!/^[A-Za-z0-9]{1,20}$/.test(surname.value)) {
         alert('Second Name is invalid.');
         valid = false;
       }
