@@ -1,8 +1,4 @@
-//Importing mysql module to use its functionality for working with MYSQL databases
 var mysql = require("mysql");
-//Using the create connection method to create a connection object with MYSQL database
-//connection details (host, database name, user, and password)
-//All these credentials prior defined on the MYSQL workbench
 var connection = mysql.createConnection({
     host: "localhost",
     database:"mysql_db",
@@ -10,6 +6,63 @@ var connection = mysql.createConnection({
     password:"password"
 
 })
-//Exportting the connection object so that it can be imported and used in other parts of our peoject
-//The same connection is called on server.js to allow connectivity
-module.exports = connection;
+// function to create the connection with the data base
+function createDatabaseConnection() {
+    connection.connect((err) => { //try connection and handle the error, showing a error message 
+      if (err) {
+        console.error('Error connecting to MySQL:', err.message);
+        return;
+      } // if connection is successfull output to the console
+      console.log('Connected to MySQL');
+    });
+  }
+  // function to close the data base connection, handle error and output when connection is closed 
+function closeDatabaseConnection() {
+    connection.end((err) => {
+      if (err) {
+        console.error('Error closing MySQL connection:', err.message);
+        return;
+      }
+      console.log('Connection closed');
+    });
+  }
+  // function to check if the records are valid and insert them to the database 
+function insertValidRecords(validRecords, callback) {
+    // check if the  valid record isn't null
+    if (validRecords.length === 0) {
+      console.log('No valid records to insert.');
+      callback();
+      return;
+    }
+  
+    const insertQuery = // instantiate a Sql query to be called 
+      'INSERT INTO mysql_table (first_name, surname, email, phone_number, eircode) VALUES ?';
+      // creates a map  in the valid records with the persons atributes 
+    const values = validRecords.map((record) => [
+      record.first_name,
+      record.surname,
+      record.email,
+      record.phone_number,
+      record.eircode,
+    ]);
+     
+    // call a connection query  to insert the sql query with the map of  the validRecords
+    connection.query(insertQuery, [values], (err, results) => {
+      if (err) { // if can't insert show a error message 
+        console.error('Error inserting records into MySQL:', err.message);
+        callback();
+        return;
+      } // show how many of the records was able to be inserted into the database 
+      console.log(`${results.affectedRows} records inserted into MySQL`);
+      callback();
+    });
+  }
+  // export the modules create when database is called
+module.exports = {
+    connection,
+    createDatabaseConnection,
+    closeDatabaseConnection,
+    insertValidRecords,
+  };
+
+//module.exports = connection1;
