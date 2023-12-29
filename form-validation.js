@@ -1,4 +1,5 @@
 //Form-validation.js
+//This validation will work when opening the form.html from the folder, what is different than accessing localhod:3000
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('contactForm');
   

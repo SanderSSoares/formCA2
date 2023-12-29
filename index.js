@@ -18,18 +18,18 @@ function isValidRecord(record) {
 
   // Regular Expressions to validate each field before adding it to the database
   if (
-    !/^[A-Za-z0-9]{1,20}$/.test(record.first_name) ||
-    !/^[A-Za-z0-9]{1,20}$/.test(record.surname) ||
-    !emailRegex.test(record.email) ||
-    !/^\d{10}$/.test(record.phone_number) ||
-    !/^[0-9][A-Za-z0-9]{5}$/.test(record.eircode)
+    !/^[A-Za-z0-9]{1,20}$/.test(record.first_name) ||//First name with max 20 alphanumeric characters
+    !/^[A-Za-z0-9]{1,20}$/.test(record.surname) ||//same for surname
+    !emailRegex.test(record.email) ||//email follows the Regex which automatically apply validation
+    !/^\d{10}$/.test(record.phone_number) ||//Phone number must has only numbers, up to 10 digits
+    !/^[0-9][A-Za-z0-9]{5}$/.test(record.eircode)//Eircode must start with number and have 5 more characters (total 6)
   ) {
     // Logs to the terminal when an error is found
     console.log('This contains invalid values. Please check the inputs at the following index');
     // If any field doesn't pass, set the valid boolean to be false
     valid = false;
   } else {
-    return valid;
+    return valid;//Otherwise, it is valid
   }
 }
 
@@ -82,14 +82,14 @@ function checkDatabaseSchema(callback) {
   const checkTableQuery = "SHOW TABLES LIKE 'mysql_table';";
   connection.query(checkTableQuery, (err, results) => {
     if (err) {
-      console.error('Error checking database schema:', err.message);
+      console.error('Error checking database schema:', err.message);//In case give some error, throw the err
       callback(false);
       return;
     }
     // Check if the table exists
     const tableExists = results.length > 0;
     if (!tableExists) {
-      console.error('Error: Table "mysql_table" does not exist.');
+      console.error('Error: Table "mysql_table" does not exist.');//In case table does not exists
       callback(false);
       return;
     }
@@ -97,7 +97,6 @@ function checkDatabaseSchema(callback) {
     callback(true);
   });
 }
-
 try {
   // Instantiate the validateCSVData method that parses the CSV data and validates it
   const validatedData = validateCSVData(csvData);
@@ -112,7 +111,6 @@ try {
     if (schemaIsValid) {
       // Insert valid records in the database
       database.insertValidRecords(validatedData, () => {
-        // Close the database connection after the records are inserted
       });
     } else {
       console.error('Error: Database schema is not valid. Cannot insert records.');
@@ -124,6 +122,7 @@ try {
   console.error('Error:', error.message);
 }
 
+//Part that will control when running through localhost:3000
 // Importing the libraries to be used in the project
 // Import the express package framework instantiating it
 var express = require('express');
@@ -131,11 +130,11 @@ var app = express(); // Call the method using setting to the variable app that h
 var path = require('path');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })); // App method to encode the URL and only access those which match the requirement
-
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'form.html'));
 });
-
+// Use middleware functions
+app.use(logRequest);
 // Search for CSS
 app.get('/style.css', (req, res) => {
   res.setHeader('Content-Type', 'text/css');
@@ -191,9 +190,22 @@ app.post('/submit', function (req, res) {
 app.get('/form', function (req, res) {
   res.sendFile(__dirname + '/form.html');
 });
-
+// Use the error handler middleware
+app.use(errorHandler);
 // Set the app to listen to the port 3000 and run a function
 app.listen(3000, function () {
   console.log('App Listening on port 3000 ')
-  // database.closeDatabaseConnection();
 })
+
+// Middleware function to log incoming requests with below parameters
+function logRequest(req, res, next) {
+  console.log(`[${new Date()}] Request received: ${req.method} ${req.url}`);//logs information about the incoming request
+  //Including date, HTTP method of the request and URL of the request
+  next(); // Call the next middleware in the stack
+}
+
+// Middleware function to handle errors with below parameters
+function errorHandler(err, req, res, next) {
+  console.error('Error:', err.message);//Logs the error message to the console.
+  res.status(500).send('Internal Server Error');//Sends a response to the client with a status code of 500 (Internal Server Error)
+}
