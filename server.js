@@ -1,6 +1,6 @@
 
-// Read csv data, separate each word and but at the right place on the data base 
 
+// Read csv data, separate each word and but at the right place on the data base 
 // index.js
 const csvData = `"John", "Doe","johndoe@example.com", "0893216548", "1YR5DD"
 "Jane", "Smith","janesmith@example.com", "00892856548", "8MH7WE"
@@ -30,9 +30,7 @@ function isValidRecord(record) {
     // logs to the terminal when error is found 
 console.log('this contains invalid values please check the inputs at the following index');
 // if any field doesan't pass set valid boolean to be false  
- valid = false; 
-
-
+ valid = false;
   }else{
     return valid;
  
@@ -55,10 +53,6 @@ function parseCSVData(csvString) { // take as paramether any csvString
   // return  records as a map of all the lines 
   return records;
 }
-
-
-
-
 // function to validate csv data, and split it calling a function, after validate  and insert it into a array,
 // or throw an error showing the index for the file 
 function validateCSVData(csvData) {
@@ -78,20 +72,13 @@ function validateCSVData(csvData) {
 
   return validRecords;// return the records which are valid 
 }
-
-
  // function to throw and error showing the index where it happend 
  function throwValidationError(index) {
   console.log(`Validation failed for record at index  ${index}`);
  // throw new Error(`Validation failed for record at index ${index}`); 
 }
-
-
-
-
-
 // try and catch for handlying error 
-try {
+  try {
   // instantiate the validaCSV data methop that parces the csv data and validate it 
  const validatedData = validateCSVData(csvData);
  // show the validated data in the console 
@@ -104,7 +91,7 @@ database.createDatabaseConnection();
    
  });
  // catch any error and show a message 
-} catch (error) {
+  } catch (error) {
  console.error('Error:', error.message);
 }
 // importing the libraries to be used in the project 
@@ -119,6 +106,8 @@ var path = require('path');
 app.use(express.static('public'));
 
 app.use(express.urlencoded({extended:true}));// app method to encode the url  and only access those which matches the requirement
+app.use(checkPort);
+app.use(checkDatabaseSchema);
 
 app.get('/', function(req,res){
 
@@ -164,7 +153,8 @@ app.post('/submit', function(req, res){
                 console.error("Error inserting data:", err);
                 return res.status(500).send("Error: Could not insert data into the database");
             }
-            res.redirect("/form.html");
+           //Otherwise, display that form was submitted successfully!
+           res.send("Form submitted successfully!");
         });
     }else{
 
@@ -183,3 +173,59 @@ app.listen(3000, function(){
    // database.closeDatabaseConnection();
    
 })
+
+// Middleware for Checking Port
+function checkPort(req, res, next) {
+  const port = 3000; // Specify the port you want to check
+  const isPortOpen = require('is-port-reachable');
+
+  isPortOpen(port, { host: 'localhost' }).then((open) => {
+    if (open) {
+      next(); // Port is open, proceed to the next middleware
+    } else {
+      res.status(500).send('Error: The specified port is not open.');
+    }
+  });
+}
+
+// Middleware for Database Schema Check
+function checkDatabaseSchemaFunction(req, res, next) {
+  const requiredTable = 'mysql_table'; // Specify your required table name
+  const requiredColumns = ['first_name', 'surname', 'email', 'phone_number', 'eircode']; // Specify your required columns
+
+  const query = `
+    SELECT TABLE_NAME, COLUMN_NAME
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_NAME = ? AND COLUMN_NAME IN (?)
+  `;
+
+  connection.query(query, [requiredTable, requiredColumns], (err, results) => {
+    if (err) {
+      console.error('Error checking database schema:', err);
+      res.status(500).send('Error checking database schema.');
+      return;
+    }
+
+    const missingColumns = requiredColumns.filter((column) =>
+      results.every((result) => result.COLUMN_NAME !== column)
+    );
+
+    if (missingColumns.length === 0) {
+      next(); // Database schema is valid, proceed to the next middleware
+    } else {
+      res.status(500).send(`Error: Missing columns in the database schema: ${missingColumns.join(', ')}.`);
+    }
+  });
+}
+
+// Middleware for Database Schema Check
+function checkDatabaseSchema(req, res, next) {
+  // Assuming you have a function to check the database schema
+  const isDatabaseSchemaValid = checkDatabaseSchemaFunction();
+
+  if (isDatabaseSchemaValid) {
+    next(); // Database schema is valid, proceed to the next middleware
+  } else {
+    res.status(500).send('Error: The database schema is not valid.');
+  }
+}
