@@ -52,7 +52,6 @@ function parseCSVData(csvString) {
   // Return records as a map of all the lines
   return records;
 }
-
 // Function to validate CSV data, split it, call a function after validation, and insert it into an array,
 // or throw an error showing the index for the file
 function validateCSVData(csvData) {
@@ -71,7 +70,6 @@ function validateCSVData(csvData) {
   });
   return validRecords; // Return the records which are valid
 }
-
 // Function to throw an error showing the index where it happened
 function throwValidationError(index) {
   console.log(`Validation failed for record at index ${index}`);
@@ -82,25 +80,19 @@ function throwValidationError(index) {
 function checkDatabaseSchema(callback) {
   // Query to check if the table exists
   const checkTableQuery = "SHOW TABLES LIKE 'mysql_table';";
-
   connection.query(checkTableQuery, (err, results) => {
     if (err) {
       console.error('Error checking database schema:', err.message);
       callback(false);
       return;
     }
-
     // Check if the table exists
     const tableExists = results.length > 0;
-
     if (!tableExists) {
       console.error('Error: Table "mysql_table" does not exist.');
       callback(false);
       return;
     }
-
-    // Check additional schema requirements if needed
-
     // If all checks pass, the schema is valid
     callback(true);
   });
@@ -118,14 +110,15 @@ try {
   // Check if the database schema is valid before inserting records
   checkDatabaseSchema((schemaIsValid) => {
     if (schemaIsValid) {
-      // Insert valid records in the database and close the connection
-      database.insertValidRecords(validatedData, () => {});
+      // Insert valid records in the database
+      database.insertValidRecords(validatedData, () => {
+        // Close the database connection after the records are inserted
+      });
     } else {
       console.error('Error: Database schema is not valid. Cannot insert records.');
+      // Close the database connection even if the schema is not valid
+      database.closeDatabaseConnection();
     }
-
-    // Close the database connection
-    database.closeDatabaseConnection();
   });
 } catch (error) {
   console.error('Error:', error.message);
@@ -201,5 +194,6 @@ app.get('/form', function (req, res) {
 
 // Set the app to listen to the port 3000 and run a function
 app.listen(3000, function () {
-  console.log('App Listening on port 3000 ');
-});
+  console.log('App Listening on port 3000 ')
+  // database.closeDatabaseConnection();
+})
