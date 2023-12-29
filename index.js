@@ -128,7 +128,8 @@ try {
 var express = require('express');
 var app = express(); // Call the method using setting to the variable app that has access to all functions and modules of the express framework
 var path = require('path');
-app.use(express.static('public'));
+//configuring Express to serve static files from the "public" directory.
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true })); // App method to encode the URL and only access those which match the requirement
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'form.html'));
@@ -145,11 +146,11 @@ app.get('/style.css', (req, res) => {
 app.post('/submit', function (req, res) {
   const { first_name, surname, email, phone_number, eircode } = req.body;
 
-  if (!/^[A-Za-z0-9]{1,20}$/.test(first_name)) {
+  if (!/^[A-Za-z0-9]{1,20}$/.test(first_name)) {//validation for first name, allowing alphanumerics up to 20 characters
     return res.send('First Name must be alphanumeric, less than 20 characters.');
   }
 
-  if (!/^[A-Za-z0-9]{1,20}$/.test(surname)) {
+  if (!/^[A-Za-z0-9]{1,20}$/.test(surname)) {//validation for surname, allowing alphanumerics up to 20 characters
     return res.send('Surname must be alphanumeric, less than 20 characters.');
   }
 
@@ -198,6 +199,7 @@ app.listen(3000, function () {
 })
 
 // Middleware function to log incoming requests with below parameters
+//Everything will be displayed after many actions while using this program on the terminal
 function logRequest(req, res, next) {
   console.log(`[${new Date()}] Request received: ${req.method} ${req.url}`);//logs information about the incoming request
   //Including date, HTTP method of the request and URL of the request

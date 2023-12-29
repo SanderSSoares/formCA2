@@ -1,47 +1,72 @@
+<!-- Declaration of the document type and HTML root element with the language attribute -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Form</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Meta tag specifying character set and viewport configuration -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title of the HTML document -->
+    <title>Form</title>
+
+    <!-- Linking an external stylesheet (style.css) for styling -->
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
 
-<!-- Image 1: natal -->
-<img src="images/natal.png" alt="Cartoon character named Frank" style="position: absolute; top: 0; left: 0;">
+    <!-- Image 1: Natal (Christmas-related image) positioned at the top-left -->
+    <img src="images/natal.png" alt="Cartoon character named Frank" style="position: absolute; top: 0; left: 0;">
 
-<!-- Image 2: Snowman -->
-<img src="images/snowman.png" alt="Snowman with friends" style="position: absolute; bottom: 0; right: 0;">
+    <!-- Image 2: Snowman positioned at the bottom-right -->
+    <img src="images/snowman.png" alt="Snowman with friends" style="position: absolute; bottom: 0; right: 0;">
 
-<div class="form-container">
-  <form id="contactForm" action='/submit' method="POST">
-    <h2>Sign up</h2>
-    <div class="form-group">
-      <label for="first_name">First Name:</label>
-      <input type="text" id="first_name" name="first_name" required>
-    </div>
-    <div class="form-group">
-      <label for="surname">Second Name:</label>
-      <input type="text" id="surname" name="surname" required>
-    </div>
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-    </div>
-    <div class="form-group">
-      <label for="phone_number">Phone Number:</label>
-      <input type="tel" id="phone_number" name="phone_number" required>
-    </div>
-    <div class="form-group">
-      <label for="eircode">Eircode:</label>
-      <input type="text" id="eircode" name="eircode" required>
-    </div>
-    <button type="submit" value='/submit' class="submit-btn">Send</button>
-  </form>
-</div>
+    <!-- Container for the form -->
+    <div class="form-container">
+        <!-- Form with an ID, action attribute for the submission URL, and method set to POST -->
+        <form id="contactForm" action='/submit' method="POST">
+            <!-- Heading for the form -->
+            <h2>Sign up</h2>
 
-<script src="form-validation"></script>
+            <!-- Form input group for First Name with label and required text input -->
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+
+            <!-- Form input group for Second Name with label and required text input -->
+            <div class="form-group">
+                <label for="surname">Second Name:</label>
+                <input type="text" id="surname" name="surname" required>
+            </div>
+
+            <!-- Form input group for Email with label and required email input -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <!-- Form input group for Phone Number with label and required telephone input -->
+            <div class="form-group">
+                <label for="phone_number">Phone Number:</label>
+                <input type="tel" id="phone_number" name="phone_number" required>
+            </div>
+
+            <!-- Form input group for Eircode with label and required text input -->
+            <div class="form-group">
+                <label for="eircode">Eircode:</label>
+                <input type="text" id="eircode" name="eircode" required>
+            </div>
+
+            <!-- Button to submit the form with a specific value and a class for styling -->
+            <button type="submit" value='/submit' class="submit-btn">Send</button>
+        </form>
+    </div>
+
+    <!-- Script tag to include a JavaScript file (form-validation.js) -->
+    <script src="form-validation"></script>
 
 </body>
+
 </html>
