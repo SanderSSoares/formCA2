@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Second Name is invalid.');
         valid = false;
       }
-  
       // Validate Phone (numeric, 10 characters)
       if (!/^\d{10}$/.test(phone.value)) {
         alert('Phone number is invalid.');
@@ -33,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!/^[0-9][A-Za-z0-9]{5}$/.test(eircode.value)) {
         alert('Eircode is invalid.');
         valid = false;
+      }
+      if (valid) {
+        alert('All information is valid!!');
       }
     });
   });
